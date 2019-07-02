@@ -1,0 +1,67 @@
+<html>
+	<head>
+		<title>TheWeather</title>
+		<meta charset="UTF-8">
+	</head>
+	<body>
+		<duv>
+			<h1 style="color:rgb(0,100,200)">The Weather</h1>
+		</duv>
+		<div>
+			<h3 style="width:25%">Select a Location:</h3>
+			<select onchange="getWeather()" style="width:25%" id="select_location">
+				<option disabled selected value>-</option>
+			</select>
+		</div>
+		<div style="height: 10px"></div>
+		<div style="width:25%">
+			<h4 style="width:50;display: inline;">Select a Day:</h4>
+			<select onchange="getWeather()" style="width:50%;float: right;display: inline;" id="select_day">
+				<option value="0">Today</option>
+				<option value="1">+1 Day</option>
+				<option value="2">+2 Days</option>
+				<option value="3">+3 Days</option>
+				<option value="4">+4 Days</option>
+			</select>
+		</div>
+		<div style="height: 10px"></div>
+		<duv>
+			<table style="width:25%" id="table_forecast">
+
+			</table>
+		</duv>
+	</body>
+	<script type="text/javascript">
+		function getLocations(){
+			var select_location = document.getElementById("select_location");
+			var locations = fetch("http://localhost:8080/api/locations")
+					.then((response) => response.json())
+					.then(function (data) {
+						for(l in data){
+							var option = document.createElement("option");
+							option.innerHTML = data[l];
+							option.value = data[l];
+							select_location.appendChild(option);
+						}
+					})
+		}
+		function getWeather(){
+			var select_location = document.getElementById("select_location");
+			var forecast = fetch("http://localhost:8080/api/forecast/"+encodeURIComponent(select_location.value).trim())
+					.then((response) => response.json())
+					.then(function (data) {
+						var select_day = document.getElementById("select_day");
+						var table_forecast = document.getElementById("table_forecast");
+						var forecast = data["data"][select_day.value];
+						var append_table = ""
+						for(e in forecast){
+							append_table = append_table + "<tr><th style=\"width:50%;float:left\">" + e + ":</th><td style=\"width:50%\">" + forecast[e] + "</td></tr>"
+							
+						}
+						table_forecast.innerHTML = append_table;
+					})
+
+		}
+		window.onload = getLocations();
+	</script>
+</html>
