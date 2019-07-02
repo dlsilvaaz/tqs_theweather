@@ -16,9 +16,9 @@ public class Cache {
     CommandLineRunner run;
 	
 	private static RestTemplate restTemplate = new RestTemplate();
-	private static Map<String,Forecast> forecasts = new HashMap<>();
-	private static Map<String,Integer> locations = new HashMap<>();
-	private static long lastUpdateTime = System.currentTimeMillis() / 1000L - 901;
+	public static Map<String,Forecast> forecasts = new HashMap<>();
+	public static Map<String,Integer> locations = new HashMap<>();
+	public static long lastUpdateTime = System.currentTimeMillis() / 1000L - 901;
 	
 	public static void setup() {
 		LocationsCollection collection = restTemplate.getForObject("http://api.ipma.pt/open-data/distrits-islands.json", LocationsCollection.class);
@@ -60,6 +60,13 @@ public class Cache {
 	
 	public static Set<String> getLocations() {
 		return locations.keySet();
+	}
+	
+	public static void reset() {
+		restTemplate = new RestTemplate();
+		forecasts = new HashMap<>();
+		locations = new HashMap<>();
+		lastUpdateTime = System.currentTimeMillis() / 1000L - 901;
 	}
 
 }
