@@ -52,7 +52,7 @@ public class Cache {
 	}
 	
 	public static Forecast getForecast(String name) {
-		if((System.currentTimeMillis() / 1000L) - lastUpdateTime > 60) {
+		if((System.currentTimeMillis() / 1000L) - lastUpdateTime > 600) {
 			fetch();
 		}
 		return forecasts.get(name);
